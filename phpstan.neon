@@ -1,0 +1,8 @@
+parameters:
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    editorUrl: '%%file%% on line %%line%%'
+    tmpDir: /tmp/qa/phpstan
+    level: max
+    paths:
+        - src

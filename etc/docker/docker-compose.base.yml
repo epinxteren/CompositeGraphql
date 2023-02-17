@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+    traefik:
+        image: traefik:v2.6
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        command:
+            - --api.insecure=true
+            - --entrypoints.web.address=:80
+            - --entrypoints.web-secure.address=:443
+            - --providers.docker=true
+            - --providers.docker.exposedByDefault=false
+            - '--providers.docker.constraints=Label(`custom.project_name`,`${COMPOSE_PROJECT_NAME}`)'
+
+    redis:
+        image: 'redis:alpine'
+        environment:
+            - REDIS_REPLICATION_MODE=master
+            - REDIS_MAXMEMORY=512
+        security_opt:
+            - seccomp:unconfined
+
+    database:
+        image: mysql:5.7
+        command:
+            mysqld
+            --sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+            --innodb_strict_mode=OFF
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+        environment:
+            - 'discovery.type=single-node'
+            - 'cluster.name=sf-events'
+            - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+            - 'xpack.security.enabled=false'
+
+volumes:
+    cache:
+        driver: local

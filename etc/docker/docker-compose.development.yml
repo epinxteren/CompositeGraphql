@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+    php:
+        build:
+            dockerfile: ../etc/docker/php/Dockerfile
+            context: ../../.
+            target: development
+
+    database:
+        tmpfs:
+            - '/tmp/:rw,noexec,nosuid,size=50m'

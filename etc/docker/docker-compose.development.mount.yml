@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+    php:
+        volumes:
+            - '../../:/app'
+        build:
+            dockerfile: etc/docker/php/Dockerfile
+            context: ../../.
+            target: development
+
+    nginx:
+        volumes:
+            - '../../:/app'
+            - '../../etc/docker/config/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
+
+    database:
+        tmpfs:
+            - '/tmp/:rw,noexec,nosuid,size=50m'
+

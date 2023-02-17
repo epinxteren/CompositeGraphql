@@ -1,0 +1,4 @@
+tls:
+    certificates:
+        - keyFile: "/etc/certs/docker.local.key"
+          certFile: "/etc/certs/docker.local.pem"

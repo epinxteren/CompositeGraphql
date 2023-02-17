@@ -1,0 +1,39 @@
+# Overrides pre-existing composer files.
+#
+# The makefile uses your docker-compose.override.yml file if it exists.
+#
+services:
+    database:
+        ports:
+            # <host>:<docker>
+            - '1337:3306'
+    traefik:
+        ports:
+            - '80:80'
+            - '443:443'
+            - '8080:8080'
+            - "50000:8080"
+            - "60000:80"
+        volumes:
+            - ./traefik/config/static.yml:/etc/traefik/traefik.yml:cached
+            - ./traefik/config/dynamic/:/etc/traefik/dynamic/:cached
+            - ./traefik/certificates:/etc/certs:ro
+
+    elasticsearch:
+        ports:
+            - '9200:9200'
+
+    redis:
+        ports:
+            - '6379:6379'
+
+    nginx:
+        ports:
+            - '20000:80'
+        extra_hosts:
+            - host.docker.internal:host-gateway
+
+    php:
+        extra_hosts:
+            - host.docker.internal:host-gateway
+

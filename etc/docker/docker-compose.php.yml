@@ -1,0 +1,32 @@
+# No volumes in this file, this should be moved to development.yml
+version: '3.9'
+
+services:
+    nginx:
+        image: nginx
+        depends_on:
+            - php
+        labels:
+            - traefik.enable=true
+            - 'traefik.http.routers.${COMPOSE_PROJECT_NAME}-php.tls=true'
+            - 'traefik.http.routers.${COMPOSE_PROJECT_NAME}-php.rule=Host(`php.${COMPOSE_PROJECT_NAME}.local`)'
+            - 'traefik.http.services.${COMPOSE_PROJECT_NAME}-php.loadbalancer.server.port=80'
+            - 'custom.project_name=${COMPOSE_PROJECT_NAME}'
+
+    php:
+        external_links: # TODO: This feature is deprecated. Use networks.
+            - traefik:php.${COMPOSE_PROJECT_NAME}.local
+        environment:
+            - CI_NODE_INDEX=${CI_NODE_INDEX}
+            - CI_NODE_TOTAL=${CI_NODE_TOTAL}
+            - APP_VERSIONS
+            - PUSHER_SECRET=${PUSHER_SECRET}
+            - XDEBUG_MODE=debug
+            - XDEBUG_CLIENT_HOST=php.docker.internal
+            - 'PHP_IDE_CONFIG=serverName=php.${COMPOSE_PROJECT_NAME}.local'
+        depends_on:
+            - database
+            - redis
+            - elasticsearch
+        labels:
+            - traefik.enable=false

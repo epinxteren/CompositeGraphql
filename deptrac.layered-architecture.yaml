@@ -1,0 +1,81 @@
+parameters:
+    paths:
+        - ./src
+
+    layers:
+        - name: Domain
+          collectors:
+              - type: classNameRegex
+                regex: '#.*\\Domain\\.*#'
+
+        - name: Presentation
+          collectors:
+              - type: classNameRegex
+                regex: '#.*\\Presentation\\.*#'
+
+        - name: Application
+          collectors:
+              - type: classNameRegex
+                regex: '#.*\\Application\\.*#'
+
+        - name: Infrastructure
+          collectors:
+              - type: classNameRegex
+                regex: '#.*\\Infrastructure\\.*#'
+
+        - name: DomainVendor
+          collectors:
+              - type: className
+                regex: ^(Ramsey\\Uuid)\\.*
+              - type: className
+                regex: ^(GraphQL\\Error)\\.*
+              - type: className
+                regex: ^(Assert)\\.*
+              - type: className
+                regex: ^(Webmozart\\Assert)\\.*
+              - type: className
+                regex: ^(Utility\\Validation)\\.*
+              - type: className
+                regex: ^(Symfony\\Contracts)\\.*
+              - type: className
+                regex: ^(Symfony\\Component\\Translation)\\.*
+              - type: className
+                regex: ^(Psr)\\.*
+
+        - name: ApplicationVendor
+          collectors:
+              - type: className
+                regex: GuzzleHttp\\Promise
+              - type: className
+                regex: Symfony\\Component\\Stopwatch\\Stopwatch
+              - type: className
+                regex: Psr\\Container\\ContainerInterface
+
+        - name: InfrastructureVendor
+          collectors:
+              - type: bool
+                must:
+                    - type: className
+                      regex: ^(Spatie\\ElasticsearchQueryBuilder|ApiPlatform|Symfony|Doctrine|GraphQL|Elasticsearch|Pusher)\\.*
+                must_not:
+                    - type: className
+                      regex: GraphQL\\Error\\ClientAware|Symfony\\Contracts\\Translation
+                    - type: className
+                      regex: Symfony\\Component\\Stopwatch\\Stopwatch
+                    - type: className
+                      regex: Symfony\\Component\\DependencyInjection\\Attribute\\TaggedIterator
+
+    ruleset:
+      Presentation:
+        - Application
+        - +Infrastructure
+      Application:
+        - +Domain
+        - ApplicationVendor
+      Domain:
+        - Contract
+        - DomainVendor
+      Infrastructure:
+        - +Presentation
+        - +Application
+        - InfrastructureVendor

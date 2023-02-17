@@ -1,0 +1,54 @@
+{
+  "name": "ericpinxteren/composite-graphql",
+  "description": "Composite GraphQL library",
+  "type": "library",
+  "require": {
+    "php": "^8.1",
+    "beberlei/assert": "^3",
+    "guzzlehttp/guzzle": "^7.5",
+    "webonyx/graphql-php": "^14"
+  },
+  "require-dev": {
+    "mockery/mockery": "^1.5",
+    "pharhub/php-cs-fixer": "^3.6",
+    "phpmd/phpmd": "^2.13",
+    "phpstan/phpstan": "^1.4.2",
+    "phpunit/phpunit": "9.5.20",
+    "qossmic/deptrac-shim": "^0.19.3",
+    "roave/security-advisories": "dev-master",
+    "sylius-labs/coding-standard": "v4.2.0"
+  },
+  "config": {
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "CompositeGraphQL\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "replace": {
+  },
+  "scripts": {
+  },
+  "conflict": {
+  },
+  "extra": {
+  },
+  "repositories": {
+    "pharhub": {
+      "type": "composer",
+      "url": "https://packages.pharhub.dev"
+    }
+  }
+}
