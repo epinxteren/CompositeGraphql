@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CompositeGraphQL\Presentation\Example;
+namespace Example\simple;
 
 use CompositeGraphQL\Infrastructure\GraphQLResolver;
 use CompositeGraphQL\Infrastructure\ResolverArguments;

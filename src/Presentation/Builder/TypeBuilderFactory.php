@@ -17,7 +17,7 @@ class TypeBuilderFactory
     }
 
     /**
-     * @template T extends TypeBuilder
+     * @template T of TypeBuilder
      *
      * @param class-string<T> $class
      *

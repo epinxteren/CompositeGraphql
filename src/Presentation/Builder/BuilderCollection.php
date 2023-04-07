@@ -10,7 +10,7 @@ use CompositeGraphQL\Presentation\Contract\TypeBuilder;
 use CompositeGraphQL\Presentation\Value\Name;
 
 /**
- * @template T extends TypeBuilder
+ * @template T of TypeBuilder
  */
 class BuilderCollection
 {

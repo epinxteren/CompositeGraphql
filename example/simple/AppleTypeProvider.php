@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CompositeGraphQL\Presentation\Example;
+namespace Example\simple;
 
 use CompositeGraphQL\Infrastructure\Symfony\SymfonyServiceReference;
 use CompositeGraphQL\Presentation\Contract\SchemaBuilder;

@@ -2,21 +2,12 @@
 
 declare(strict_types=1);
 
-namespace example;
+namespace Example\simple;
 
 use CompositeGraphQL\Infrastructure\Symfony\GraphQLSchemaCompilerPass;
 use CompositeGraphQL\Infrastructure\Webonyx\GuzzlePromiseAdapter;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
-use Library\SinglePageApplication\Factory\NXSpaDTOFactory;
-use Library\SinglePageApplication\Value\SpaPageConfig;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
-use Twig\Environment;
 
 final class GraphlQLController extends AbstractController
 {

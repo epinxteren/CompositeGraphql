@@ -8,7 +8,7 @@ use CompositeGraphQL\Presentation\Value\Name;
 use CompositeGraphQL\Presentation\Value\Type;
 
 /**
- * @template T extends Normalized
+ * @template T of Type
  */
 abstract class AbstractCollection
 {
@@ -18,7 +18,7 @@ abstract class AbstractCollection
     private array $types = [];
 
     /**
-     * @param array<string, T> $types
+     * @param T[] $types
      */
     final public function __construct(array $types)
     {
@@ -85,7 +85,7 @@ abstract class AbstractCollection
      *
      * @param callable(T): TReturn $callback
      *
-     * @return array<string, T>
+     * @return array<string, TReturn>
      */
     public function map(callable $callback): array
     {

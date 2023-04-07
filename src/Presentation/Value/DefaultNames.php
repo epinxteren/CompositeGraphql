@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CompositeGraphQL\Presentation\Value;
 
-enum GraphQLNames implements Name
+enum DefaultNames implements Name
 {
     /*
      * Root objects

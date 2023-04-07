@@ -8,7 +8,7 @@ use CompositeGraphQL\Presentation\Builder\ArgumentSetBuilder;
 use CompositeGraphQL\Presentation\Builder\InputObjectBuilder;
 use CompositeGraphQL\Presentation\Builder\OutputObjectBuilder;
 use CompositeGraphQL\Presentation\Builder\ScalarBuilder;
-use CompositeGraphQL\Presentation\Value\GraphQLNames;
+use CompositeGraphQL\Presentation\Value\DefaultNames;
 use CompositeGraphQL\Presentation\Value\Name;
 use CompositeGraphQL\Presentation\Value\RelayNames;
 
@@ -22,37 +22,37 @@ trait BaseTypesBuilderTrait
 
     public function string(): ScalarBuilder
     {
-        return $this->scalar(GraphQLNames::String);
+        return $this->scalar(DefaultNames::String);
     }
 
     public function int(): ScalarBuilder
     {
-        return $this->scalar(GraphQLNames::Int);
+        return $this->scalar(DefaultNames::Int);
     }
 
     public function float(): ScalarBuilder
     {
-        return $this->scalar(GraphQLNames::Float);
+        return $this->scalar(DefaultNames::Float);
     }
 
     public function boolean(): ScalarBuilder
     {
-        return $this->scalar(GraphQLNames::Boolean);
+        return $this->scalar(DefaultNames::Boolean);
     }
 
     public function id(): ScalarBuilder
     {
-        return $this->scalar(GraphQLNames::ID);
+        return $this->scalar(DefaultNames::ID);
     }
 
     public function query(): OutputObjectBuilder
     {
-        return $this->outputObject(GraphQLNames::Query);
+        return $this->outputObject(DefaultNames::Query);
     }
 
     public function mutation(): InputObjectBuilder
     {
-        return $this->inputObject(GraphQLNames::Mutation);
+        return $this->inputObject(DefaultNames::Mutation);
     }
 
     public function connectionArguments(): ArgumentSetBuilder

@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace CompositeGraphQL\Presentation\Value;
 
 use CompositeGraphQL\Presentation\Value\Collections\Arguments;
+use CompositeGraphQL\Presentation\Value\Traits\HasDescriptionTrait;
 
-class ArgumentsSet implements InputType
+final class ArgumentsSet implements InputType
 {
+    use HasDescriptionTrait;
+
     public function __construct(private Name $name, private Arguments $arguments)
     {
-    }
-
-    public function isValid(Type $normalized): bool
-    {
-        return $normalized instanceof ArgumentType;
     }
 
     public function getName(): Name
@@ -25,10 +23,5 @@ class ArgumentsSet implements InputType
     public function getArguments(): Arguments
     {
         return $this->arguments;
-    }
-
-    public function getDescription(): ?string
-    {
-        return '';
     }
 }

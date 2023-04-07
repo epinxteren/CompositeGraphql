@@ -12,7 +12,6 @@ use CompositeGraphQL\Presentation\Value\Traits\HasDescriptionTrait;
 class OutputObject implements OutputType
 {
     use HasDescriptionTrait;
-
     private readonly OutputFields $fields;
 
     public function __construct(

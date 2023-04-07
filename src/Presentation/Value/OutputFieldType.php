@@ -16,7 +16,7 @@ class OutputFieldType implements OutputType
         private readonly Name $name,
         private readonly OutputType $type,
         private readonly Arguments $arguments,
-        private readonly ?ResolverReference $resolverServiceReference,
+        private readonly ?ResolverReference $resolverServiceReference = null,
     ) {
     }
 
