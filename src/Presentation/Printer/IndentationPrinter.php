@@ -10,6 +10,9 @@ final class IndentationPrinter
     {
         $lines = explode(PHP_EOL, $text);
         $lines = array_map(fn(string $line) => str_repeat(" ", $options->indentationSize()).$line, $lines);
-        return implode(PHP_EOL, $lines);
+        $combined = implode(PHP_EOL, $lines);
+        // Remove whitespace lines
+        $combined = preg_replace('/^\s*$/m', '', $combined);
+        return $combined;
     }
 }
