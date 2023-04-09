@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CompositeGraphQL\Presentation\Printer\Class;
+namespace CompositeGraphQL\Presentation\Printer\Debug;
 
 use CompositeGraphQL\Presentation\Printer\PrinterOptions;
 use CompositeGraphQL\Presentation\Printer\TypePrinter;
@@ -14,7 +14,7 @@ final class ScalarPrinter implements TypePrinter
     function print(Type $type, PrinterOptions $options): string
     {
         assert($type instanceof ScalarType);
-        return sprintf("scalar %s", $type->getName()->toString());
+        return $type->getName()->toString();
     }
 
     function supports(Type $type): bool

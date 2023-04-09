@@ -11,4 +11,9 @@ final class TypeNamePrinter implements TypePrinter
     {
         return $type->getName()->toString();
     }
+
+    function supports(Type $type): bool
+    {
+        return true;
+    }
 }

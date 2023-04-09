@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CompositeGraphQL\Presentation\Printer\Text;
+namespace CompositeGraphQL\Presentation\Printer\Debug;
 
 use CompositeGraphQL\Presentation\Printer\IndentationPrinter;
 use CompositeGraphQL\Presentation\Printer\TypePrinter;
@@ -9,14 +9,14 @@ use CompositeGraphQL\Presentation\Printer\TypePrinter;
 /**
  * Used for debugging purposes.
  */
-final class TextPrinterSingleton
+final class PrinterSingleton
 {
     private static ?TypePrinter $instance = null;
 
     public static function getInstance(): TypePrinter
     {
         if (self::$instance === null) {
-            $factory = new TextPrinterFactory(new IndentationPrinter());
+            $factory = new PrinterFactory(new IndentationPrinter());
             self::$instance = $factory->create();
         }
         return self::$instance;

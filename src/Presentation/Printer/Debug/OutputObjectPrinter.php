@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CompositeGraphQL\Presentation\Printer\Text;
+namespace CompositeGraphQL\Presentation\Printer\Debug;
 
 use CompositeGraphQL\Presentation\Printer\IndentationPrinter;
 use CompositeGraphQL\Presentation\Printer\PrinterOptions;
@@ -14,7 +14,6 @@ use CompositeGraphQL\Presentation\Value\Type;
 final class OutputObjectPrinter implements TypePrinter
 {
     public function __construct(
-        private readonly TypePrinter $next,
         private readonly MemberTextPrinter $members,
         private readonly IndentationPrinter $indentation
     ) {
@@ -22,9 +21,7 @@ final class OutputObjectPrinter implements TypePrinter
 
     function print(Type $type, PrinterOptions $options): string
     {
-        if (!$type instanceof OutputObject) {
-            return $this->next->print($type, $options);
-        }
+        assert($type instanceof OutputObject);
         $interfaceNames = $type->getInterfaces()->isEmpty() ? null : sprintf(
             "implements %s",
             implode(
@@ -34,7 +31,6 @@ final class OutputObjectPrinter implements TypePrinter
                 ),
             )
         );
-
         $result = ['OutputObject', $type->getName()->toString()];
         if ($interfaceNames) {
             $result[] = $interfaceNames;
@@ -48,5 +44,10 @@ final class OutputObjectPrinter implements TypePrinter
         ) : '{}';
 
         return implode(' ', $result);
+    }
+
+    function supports(Type $type): bool
+    {
+        return $type instanceof OutputObject;
     }
 }

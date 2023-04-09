@@ -71,6 +71,7 @@ class BuilderCollection
         foreach ($this->types as $type) {
             if ($type instanceof InputBuilder) {
                 $build[] = $type->buildInput();
+                continue;
             }
             if ($type instanceof OutputBuilder) {
                 $build[] = $type->buildOutput();

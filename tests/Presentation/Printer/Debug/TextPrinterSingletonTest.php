@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Presentation\Printer\Text;
+namespace Tests\Presentation\Printer\Debug;
 
 use CompositeGraphQL\Presentation\Printer\PrinterOptions;
-use CompositeGraphQL\Presentation\Printer\Text\TextPrinterSingleton;
+use CompositeGraphQL\Presentation\Printer\Debug\PrinterSingleton;
 use CompositeGraphQL\Presentation\Value\ArgumentType;
 use CompositeGraphQL\Presentation\Value\Collections\Arguments;
 use CompositeGraphQL\Presentation\Value\Collections\Interfaces;
@@ -22,7 +22,7 @@ final class TextPrinterSingletonTest extends MockeryTestCase
 
     public function testPrint(): void
     {
-        $printer = TextPrinterSingleton::getInstance();
+        $printer = PrinterSingleton::getInstance();
         $printed = $printer->print(
             new OutputObject(
                 new TestName('MyObject'),
@@ -50,7 +50,7 @@ final class TextPrinterSingletonTest extends MockeryTestCase
         );
         $this->assertEquals(
             'OutputObject MyObject implements MyInterface {
-  myField(myArgument: scalar String): scalar String
+  myField(myArgument: String): String
 }',
             $printed
         );

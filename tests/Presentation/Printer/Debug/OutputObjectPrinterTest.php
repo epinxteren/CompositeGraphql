@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Presentation\Printer\Text;
+namespace Tests\Presentation\Printer\Debug;
 
 use CompositeGraphQL\Presentation\Printer\IndentationPrinter;
 use CompositeGraphQL\Presentation\Printer\PrinterOptions;
-use CompositeGraphQL\Presentation\Printer\Text\MemberTextPrinter;
-use CompositeGraphQL\Presentation\Printer\Text\OutputObjectPrinter;
+use CompositeGraphQL\Presentation\Printer\Debug\MemberTextPrinter;
+use CompositeGraphQL\Presentation\Printer\Debug\OutputObjectPrinter;
 use CompositeGraphQL\Presentation\Printer\TypeNamePrinter;
 use CompositeGraphQL\Presentation\Value\ArgumentType;
 use CompositeGraphQL\Presentation\Value\Collections\Arguments;
@@ -36,7 +36,7 @@ final class OutputObjectPrinterTest extends MockeryTestCase
         // Should not use the actual implementation, but it's a nice to see how it works in the end.
         $memberPrinter = new MemberTextPrinter($next);
         $indent = new IndentationPrinter();
-        $printer = new OutputObjectPrinter($next, $memberPrinter, $indent);
+        $printer = new OutputObjectPrinter($memberPrinter, $indent);
 
         $options = PrinterOptions::default()->withIndentationSize(2);
 

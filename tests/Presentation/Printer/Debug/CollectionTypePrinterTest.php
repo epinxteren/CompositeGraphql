@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Presentation\Printer\Class;
+namespace Tests\Presentation\Printer\Debug;
 
 use CompositeGraphQL\Presentation\Printer\PrinterOptions;
-use CompositeGraphQL\Presentation\Printer\Class\CollectionTypePrinter;
+use CompositeGraphQL\Presentation\Printer\Debug\CollectionTypePrinter;
 use CompositeGraphQL\Presentation\Printer\TypeNamePrinter;
 use CompositeGraphQL\Presentation\Printer\TypePrinter;
 use CompositeGraphQL\Presentation\Value\CollectionType;
@@ -39,18 +39,6 @@ final class CollectionTypePrinterTest extends MockeryTestCase
     public function provideTestPrint(): array
     {
         return [
-            'SingleInputValue' => [
-                new ScalarType(
-                    DefaultNames::String
-                ),
-                'String',
-            ],
-            'SingleOutputValue' => [
-                new ScalarType(
-                    DefaultNames::String
-                ),
-                'String',
-            ],
             'MultipleInputValues' => [
                 new InputCollection(
                     new ScalarType(

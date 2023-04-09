@@ -15,11 +15,14 @@ final class RequiredTypePrinter implements TypePrinter
     {
     }
 
-    public function print(Type $type, PrinterOptions $option): string
+    public function print(Type $type, PrinterOptions $options): string
     {
-        if (!$type instanceof RequiredType) {
-            return $this->next->print($type, $option);
-        }
-        return sprintf("%s!", $this->next->print($type->of(), $option));
+        assert($type instanceof RequiredType);
+        return sprintf("%s!", $this->next->print($type->of(), $options));
+    }
+
+    function supports(Type $type): bool
+    {
+        return $type instanceof RequiredType;
     }
 }

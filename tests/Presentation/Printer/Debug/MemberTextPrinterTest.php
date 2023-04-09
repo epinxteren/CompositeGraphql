@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Presentation\Printer\Text;
+namespace Tests\Presentation\Printer\Debug;
 
 use CompositeGraphQL\Presentation\Printer\PrinterOptions;
-use CompositeGraphQL\Presentation\Printer\Text\MemberTextPrinter;
-use CompositeGraphQL\Presentation\Printer\Text\TestPrinter;
+use CompositeGraphQL\Presentation\Printer\Debug\MemberTextPrinter;
+use CompositeGraphQL\Presentation\Printer\Debug\TestPrinter;
 use CompositeGraphQL\Presentation\Printer\TypeNamePrinter;
 use CompositeGraphQL\Presentation\Value\ArgumentType;
 use CompositeGraphQL\Presentation\Value\Collections\Arguments;
@@ -34,10 +34,8 @@ final class MemberTextPrinterTest extends MockeryTestCase
         ]);
 
         $this->assertEquals(
-            implode(PHP_EOL, [
-                "name: String",
-                "age: Int",
-            ]),
+            'name: String
+age: Int',
             $memberTextPrinter->print($inputs, new PrinterOptions())
         );
     }
@@ -84,12 +82,14 @@ final class MemberTextPrinterTest extends MockeryTestCase
         ]);
 
         $this->assertEquals(
-            implode(PHP_EOL, [
-                '\\\\ The name',
-                "name: String",
-                '\\\\ The age',
-                "age: Int",
-            ]),
+            '"""
+The name
+"""
+name: String
+"""
+The age
+"""
+age: Int',
             $memberTextPrinter->print($inputs, new PrinterOptions())
         );
     }

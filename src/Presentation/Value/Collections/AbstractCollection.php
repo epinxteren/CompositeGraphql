@@ -97,6 +97,19 @@ abstract class AbstractCollection
         return new static(array_filter($this->types, $param));
     }
 
+    /**
+     * @return array<class-string<T>, self<T>>
+     */
+    public function groupByType(): array
+    {
+        $grouped = [];
+        foreach ($this->types as $type) {
+            $grouped[get_class($type)][] = $type;
+        }
+
+        return array_map(fn (array $types) => new static($types), $grouped);
+    }
+
     public function sortFirstBy(string ...$classes): static
     {
         return new static(

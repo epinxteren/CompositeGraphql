@@ -36,6 +36,11 @@ trait HasInputTypeTrait
     public function type(InputBuilder $nested): self
     {
         $this->root()->assertMutable();
+
+        if ($this->inputType !== null && $this->inputType->getName()->toString() !== $nested->getName()->toString()) {
+            throw new \CompileError(sprintf('%s Should have only one inputType', $this));
+        }
+
         $this->inputType = $nested;
 
         return $this;

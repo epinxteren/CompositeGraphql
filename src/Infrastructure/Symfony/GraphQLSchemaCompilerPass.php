@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CompositeGraphQL\Infrastructure\Symfony;
 
 use CompositeGraphQL\Infrastructure\Webonyx\WebonyxGraphQLSchemaDefinitionFactory;
-use CompositeGraphQL\Presentation\Printer\Text\SchemaTextPrinter;
+use CompositeGraphQL\Presentation\Printer\Debug\SchemaPrinter;
 use CompositeGraphQL\Presentation\SchemaFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,7 +25,7 @@ final class GraphQLSchemaCompilerPass implements CompilerPassInterface
         $schemaFactory = new SchemaFactory();
         $schema = $schemaFactory->create(...$types);
 
-        $printer = new SchemaTextPrinter();
+        $printer = new SchemaPrinter();
 
         return $printer->print($schema);
     }
@@ -42,7 +42,7 @@ final class GraphQLSchemaCompilerPass implements CompilerPassInterface
             $definition = $definitionFactory->create($schema, $container);
             $container->setDefinition('GraphQLV2', $definition);
         } catch (\Exception $e) {
-            $printer = new SchemaTextPrinter();
+            $printer = new SchemaPrinter();
             $error = $printer->print($schema);
             throw new \RuntimeException($e->getMessage() . '\n' . $error, 0, $e);
         }

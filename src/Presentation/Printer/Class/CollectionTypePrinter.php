@@ -17,9 +17,12 @@ final class CollectionTypePrinter implements TypePrinter
 
     public function print(Type $type, PrinterOptions $options): string
     {
-        if (!$type instanceof CollectionType) {
-            return $this->next->print($type, $options);
-        }
+        assert($type instanceof CollectionType);
         return sprintf("[%s]", $this->next->print($type->of(), $options));
+    }
+
+    function supports(Type $type): bool
+    {
+        return $type instanceof CollectionType;
     }
 }

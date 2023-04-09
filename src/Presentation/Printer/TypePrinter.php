@@ -9,4 +9,6 @@ use CompositeGraphQL\Presentation\Value\Type;
 interface TypePrinter
 {
     function print(Type $type, PrinterOptions $options): string;
+
+    function supports(Type $type): bool;
 }
