@@ -21,19 +21,19 @@ class RelayConnectionBuilder extends OutputObjectBuilder implements RelayConnect
 
         $instance = new self($connectionNane, $builder);
 
-        $builder->outputObject($name)->interface(RelayNames::Node);
+        $builder->outputObject($name)->implements(RelayNames::Node);
 
         $instance->pageInfo = $builder
             ->outputObject(new DynamicName($name, RelayNames::PageInfo))
-            ->interface(RelayNames::PageInfo);
+            ->implements(RelayNames::PageInfo);
 
         $instance->edge = $builder->outputObject(new DynamicName($name, RelayNames::Edge))
-                ->interface(RelayNames::Edge);
+                ->implements(RelayNames::Edge);
         $instance->edge
             ->field(RelayNames::node)
             ->type($builder->outputObject($node))->required();
 
-        $instance->interface(RelayNames::Connection);
+        $instance->implements(RelayNames::Connection);
         $instance->field(RelayNames::pageInfo)->type($instance->pageInfo)->required();
         $instance->field(RelayNames::edges)->type($instance->edge)->asCollection()->required();
 

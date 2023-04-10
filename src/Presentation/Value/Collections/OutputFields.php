@@ -23,6 +23,7 @@ class OutputFields extends AbstractCollection
         foreach ($interfaces->getTypes() as $interface) {
             foreach ($interface->getFields()->getTypes() as $field) {
                 if ($copy->has($field->getName())) {
+                    // TODO: check if types are the same.
                     continue;
                 }
                 $copy = $copy->add($field);

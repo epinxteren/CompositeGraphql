@@ -25,6 +25,8 @@ trait HasArgumentsTrait
      */
     private array $sets = [];
 
+    private ?Arguments $cache = null;
+
     public function argument(Name $name): Argument
     {
         $this->root()->assertMutable();
@@ -34,6 +36,8 @@ trait HasArgumentsTrait
 
     public function addArgumentSet(ArgumentSet $arguments): self
     {
+        $this->root()->assertMutable();
+
         $this->sets[] = $arguments;
 
         return $this;
@@ -47,8 +51,17 @@ trait HasArgumentsTrait
     protected function buildArguments(): Arguments
     {
         $this->root()->assertLocked();
+        $args = new Arguments($this->getArguments()->build());
+        foreach ($this->sets as $set) {
+            $arguments = $set->normalizedArguments();
+            $args = $args->merge($arguments);
+        }
+        return $args;
+    }
 
-        return new Arguments($this->getArguments()->build());
+    public function normalizedArguments(): Arguments
+    {
+        return $this->cache ??= $this->buildArguments();
     }
 
     abstract public function root(): SchemaBuilder;

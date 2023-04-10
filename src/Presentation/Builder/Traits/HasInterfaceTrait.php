@@ -17,7 +17,7 @@ trait HasInterfaceTrait
      */
     private ?BuilderCollection $interfaces;
 
-    public function interface(Name $name): self
+    public function implements(Name $name): self
     {
         $this->root()->assertMutable();
         $this->getInterfaces()->byName($name, $this->root()->interface($name));

@@ -9,6 +9,7 @@ use CompositeGraphQL\Presentation\Contract\InputBuilder;
 use CompositeGraphQL\Presentation\Value\InputCollection;
 use CompositeGraphQL\Presentation\Value\InputRequired;
 use CompositeGraphQL\Presentation\Value\InputType;
+use CompositeGraphQL\Presentation\Value\UndefinedType;
 
 trait HasInputTypeTrait
 {
@@ -48,10 +49,7 @@ trait HasInputTypeTrait
 
     protected function buildType(): InputType
     {
-        if (!$this->inputType) {
-            throw new \CompileError(sprintf('%s Should have inputType', $this));
-        }
-        $type = $this->inputType->buildInput();
+        $type = !$this->inputType ? new UndefinedType($this->getName()) : $this->inputType->buildInput();
         if ($this->isRequired) {
             $type = new InputRequired($type);
         }
@@ -61,7 +59,6 @@ trait HasInputTypeTrait
                 $type = new InputRequired($type);
             }
         }
-
         return $type;
     }
 

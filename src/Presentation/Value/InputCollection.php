@@ -25,4 +25,16 @@ class InputCollection implements CollectionType, InputType
     {
         return $this->of->getDescription();
     }
+
+    public function merge(Type $other): Type
+    {
+        if (!$other instanceof self) {
+            throw new \InvalidArgumentException('Cannot merge with other type');
+        }
+
+        $of = $this->of->merge($other->of);
+        assert($of instanceof InputType);
+
+        return new self($of);
+    }
 }

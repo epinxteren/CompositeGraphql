@@ -6,9 +6,11 @@ namespace CompositeGraphQL\Presentation\Value;
 
 use CompositeGraphQL\Presentation\Value\Collections\InputFields;
 use CompositeGraphQL\Presentation\Value\Traits\HasDescriptionTrait;
+use CompositeGraphQL\Presentation\Value\Traits\HasMergeAbleTrait;
 
 class InputObject implements InputType
 {
+    use HasMergeAbleTrait;
     use HasDescriptionTrait;
 
     public function __construct(
@@ -25,5 +27,11 @@ class InputObject implements InputType
     public function getName(): Name
     {
         return $this->name;
+    }
+
+    public function merge(Type $other): Type
+    {
+        return $this
+            ->mergeCommon($other, fn(self $o) => new self($this->name, $this->fields->merge($o->fields)));
     }
 }

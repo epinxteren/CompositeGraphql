@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace CompositeGraphQL\Presentation\Value;
 
-use CompositeGraphQL\Presentation\Value\Collections\Arguments;
 use CompositeGraphQL\Presentation\Value\Collections\Interfaces;
 use CompositeGraphQL\Presentation\Value\Collections\OutputFields;
 use CompositeGraphQL\Presentation\Value\Traits\HasDescriptionTrait;
+use CompositeGraphQL\Presentation\Value\Traits\HasMergeAbleTrait;
 
 class OutputObject implements OutputType
 {
+    use HasMergeAbleTrait;
     use HasDescriptionTrait;
+
     private readonly OutputFields $fields;
+    private readonly Interfaces $interfaces;
 
     public function __construct(
         private readonly Name $name,
-        private readonly Arguments $arguments,
         OutputFields $fields,
-        private readonly Interfaces $interfaces,
+        ?Interfaces $interfaces = null,
     ) {
-        $this->fields = $fields->addInterfaceFields($interfaces);
+        $this->interfaces = $interfaces ?? new Interfaces([]);
+        $this->fields = $fields->addInterfaceFields($this->interfaces);
     }
 
     public function getInterfaces(): Interfaces
@@ -28,28 +31,26 @@ class OutputObject implements OutputType
         return $this->interfaces;
     }
 
-    public function getName(): Name
-    {
-        return $this->name;
-    }
-
-    public function getArguments(): Arguments
-    {
-        return $this->arguments;
-    }
-
+    /**
+     * @return OutputFields
+     */
     public function getFields(): OutputFields
     {
         return $this->fields;
     }
 
-    public function mergeInterface(Interfaces $interfaces): self
+    public function getName(): Name
     {
-        return new self(
-            $this->name,
-            $this->arguments,
-            $this->fields->addInterfaceFields($interfaces),
-            $this->interfaces->merge($interfaces),
-        );
+        return $this->name;
+    }
+
+    public function merge(Type $other): Type
+    {
+        return $this
+            ->mergeCommon($other, fn(self $o) => new self(
+                $this->name,
+                $this->fields->merge($o->fields),
+                $this->interfaces->merge($o->interfaces)
+            ));
     }
 }

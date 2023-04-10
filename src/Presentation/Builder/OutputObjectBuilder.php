@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CompositeGraphQL\Presentation\Builder;
 
-use CompositeGraphQL\Presentation\Builder\Traits\HasArgumentsTrait;
 use CompositeGraphQL\Presentation\Builder\Traits\HasDescriptionTrait;
 use CompositeGraphQL\Presentation\Builder\Traits\HasInterfaceTrait;
 use CompositeGraphQL\Presentation\Builder\Traits\HasOutputFieldsTrait;
@@ -17,7 +16,6 @@ class OutputObjectBuilder extends AbstractOutputBuilder implements OutputObjectI
 {
     use HasDescriptionTrait;
     use HasOutputFieldsTrait;
-    use HasArgumentsTrait;
     use HasInterfaceTrait;
 
     /**
@@ -39,7 +37,6 @@ class OutputObjectBuilder extends AbstractOutputBuilder implements OutputObjectI
     {
         return (new OutputObject(
             $this->getName(),
-            $this->buildArguments(),
             $this->buildFields(),
             $this->buildInterfaces(),
         ))->withDescription($this->getDescription());

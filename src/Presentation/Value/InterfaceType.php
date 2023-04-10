@@ -6,9 +6,11 @@ namespace CompositeGraphQL\Presentation\Value;
 
 use CompositeGraphQL\Presentation\Value\Collections\OutputFields;
 use CompositeGraphQL\Presentation\Value\Traits\HasDescriptionTrait;
+use CompositeGraphQL\Presentation\Value\Traits\HasMergeAbleTrait;
 
 class InterfaceType implements OutputType
 {
+    use HasMergeAbleTrait;
     use HasDescriptionTrait;
 
     public function __construct(
@@ -25,5 +27,11 @@ class InterfaceType implements OutputType
     public function getFields(): OutputFields
     {
         return $this->fields;
+    }
+
+    public function merge(Type $other): Type
+    {
+        return $this
+            ->mergeCommon($other, fn(self $o) => new self($this->name, $this->fields->merge($o->fields)));
     }
 }

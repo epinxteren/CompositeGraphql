@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CompositeGraphQL\Presentation\Value\Collections;
 
+use CompositeGraphQL\Presentation\Value\InputType;
 use CompositeGraphQL\Presentation\Value\Name;
+use CompositeGraphQL\Presentation\Value\OutputType;
 use CompositeGraphQL\Presentation\Value\Type;
 
 /**
@@ -22,7 +24,7 @@ abstract class AbstractCollection
      */
     final public function __construct(array $types)
     {
-        $this->types = $types;
+        $this->types = array_values($types);
         foreach ($types as $type) {
             assert($this->isValid($type));
         }
@@ -43,12 +45,15 @@ abstract class AbstractCollection
     public function add(Type $normalized): self
     {
         assert($this->isValid($normalized));
-
-        return new static(
-            array_merge([], $this->types, [
-                $normalized->getName()->toString() => $normalized,
-            ]),
-        );
+        $clone = clone $this;
+        foreach ($clone->getTypes() as $index => $type) {
+            if ($type->getName()->toString() === $normalized->getName()->toString()) {
+                $clone->types[$index] = $type->merge($normalized);
+                return $clone;
+            }
+        }
+        $clone->types[] = $normalized;
+        return $clone;
     }
 
     /**
@@ -68,6 +73,20 @@ abstract class AbstractCollection
                 $name->toString(),
             ),
         );
+    }
+
+    public function inputByName(Name $name): InputType
+    {
+        $type = $this->byName($name);
+        assert($type instanceof InputType);
+        return $type;
+    }
+
+    public function outputByName(Name $name): OutputType
+    {
+        $type = $this->byName($name);
+        assert($type instanceof OutputType);
+        return $type;
     }
 
     /**
@@ -107,15 +126,15 @@ abstract class AbstractCollection
             $grouped[get_class($type)][] = $type;
         }
 
-        return array_map(fn (array $types) => new static($types), $grouped);
+        return array_map(fn(array $types) => new static($types), $grouped);
     }
 
     public function sortFirstBy(string ...$classes): static
     {
         return new static(
             array_merge(
-                $this->filter(fn (Type $type) => in_array(get_class($type), $classes))->sortBy(...$classes)->getTypes(),
-                $this->filter(fn (Type $type) => !in_array(get_class($type), $classes))->getTypes(),
+                $this->filter(fn(Type $type) => in_array(get_class($type), $classes))->sortBy(...$classes)->getTypes(),
+                $this->filter(fn(Type $type) => !in_array(get_class($type), $classes))->getTypes(),
             ),
         );
     }
@@ -124,7 +143,7 @@ abstract class AbstractCollection
     {
         $sorted = [];
         foreach ($classes as $class) {
-            $sorted = array_merge($sorted, $this->filter(fn (Type $type) => get_class($type) === $class)->getTypes());
+            $sorted = array_merge($sorted, $this->filter(fn(Type $type) => get_class($type) === $class)->getTypes());
         }
 
         return new static($sorted);
@@ -143,8 +162,20 @@ abstract class AbstractCollection
         return empty($this->types);
     }
 
-    public function merge(Interfaces $interfaces): static
+    /**
+     * Merge types with another collection.
+     *
+     * @param AbstractCollection $collection
+     * @return $this
+     */
+    public function merge(self $collection): static
     {
-        return new static(array_merge([], $this->types, $interfaces->types));
+        $clone = clone $this;
+        /** @var Type $type */
+        foreach ($collection->getTypes() as $type) {
+            $clone = $clone->add($type);
+        }
+
+        return $clone;
     }
 }

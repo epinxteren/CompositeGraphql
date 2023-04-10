@@ -26,7 +26,6 @@ final class TextPrinterSingletonTest extends MockeryTestCase
         $printed = $printer->print(
             new OutputObject(
                 new TestName('MyObject'),
-                new Arguments([]),
                 new OutputFields([
                     new OutputFieldType(
                         new TestName('myField'),

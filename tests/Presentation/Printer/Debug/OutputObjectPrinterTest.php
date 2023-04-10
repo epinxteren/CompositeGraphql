@@ -52,7 +52,6 @@ final class OutputObjectPrinterTest extends MockeryTestCase
             'EmptyObject' => [
                 new OutputObject(
                     new TestName('MyObject'),
-                    new Arguments([]),
                     new OutputFields([]),
                     new Interfaces([])
                 ),
@@ -61,7 +60,6 @@ final class OutputObjectPrinterTest extends MockeryTestCase
             'ObjectWithFields' => [
                 new OutputObject(
                     new TestName('MyObject'),
-                    new Arguments([]),
                     new OutputFields([
                         new OutputFieldType(
                             new TestName('myField'),
@@ -76,7 +74,6 @@ final class OutputObjectPrinterTest extends MockeryTestCase
             'ObjectWithFieldsAndArguments' => [
                 new OutputObject(
                     new TestName('MyObject'),
-                    new Arguments([]),
                     new OutputFields([
                         new OutputFieldType(
                             new TestName('myField'),
@@ -96,7 +93,6 @@ final class OutputObjectPrinterTest extends MockeryTestCase
             'ObjectWithFieldsAndArgumentsAndInterfaces' => [
                 new OutputObject(
                     new TestName('MyObject'),
-                    new Arguments([]),
                     new OutputFields([
                         new OutputFieldType(
                             new TestName('myField'),
@@ -123,13 +119,6 @@ final class OutputObjectPrinterTest extends MockeryTestCase
             'ObjectWithFieldsAndArgumentsAndInterfacesAndArguments' => [
                 new OutputObject(
                     new TestName('MyObject'),
-                    // TODO: Should this be removed?
-                    new Arguments([
-                        new ArgumentType(
-                            new TestName('myArgument'),
-                            new ScalarType(DefaultNames::String)
-                        ),
-                    ]),
                     new OutputFields([
                         new OutputFieldType(
                             new TestName('myField'),
@@ -156,7 +145,6 @@ final class OutputObjectPrinterTest extends MockeryTestCase
             'Multiple fields ' => [
                 new OutputObject(
                     new TestName('MyObject'),
-                    new Arguments([]),
                     new OutputFields([
                         new OutputFieldType(
                             new TestName('myField'),
@@ -179,7 +167,6 @@ final class OutputObjectPrinterTest extends MockeryTestCase
             'Multiple fields with arguments' => [
                 new OutputObject(
                     new TestName('MyObject'),
-                    new Arguments([]),
                     new OutputFields([
                         new OutputFieldType(
                             new TestName('myField'),
@@ -212,7 +199,6 @@ final class OutputObjectPrinterTest extends MockeryTestCase
             'Multiple fields with arguments and interfaces' => [
                 new OutputObject(
                     new TestName('MyObject'),
-                    new Arguments([]),
                     new OutputFields([
                         new OutputFieldType(
                             new TestName('myField'),

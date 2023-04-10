@@ -5,9 +5,12 @@ namespace Tests\Presentation\Builder;
 
 use CompositeGraphQL\Presentation\Builder\SchemaBuilder;
 use CompositeGraphQL\Presentation\Builder\TypeBuilderFactory;
-use CompositeGraphQL\Presentation\Printer\Debug\PrinterSingleton;
-use CompositeGraphQL\Presentation\Printer\PrinterOptions;
+use CompositeGraphQL\Presentation\Value\ArgumentsSet;
+use CompositeGraphQL\Presentation\Value\ArgumentType;
+use CompositeGraphQL\Presentation\Value\Collections\Arguments;
 use CompositeGraphQL\Presentation\Value\DefaultNames;
+use CompositeGraphQL\Presentation\Value\InputRequired;
+use CompositeGraphQL\Presentation\Value\OutputObject;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Tests\TestName;
 
@@ -19,47 +22,38 @@ final class ArgumentSetBuilderTest extends MockeryTestCase
         $factory = new TypeBuilderFactory();
         $schemaBuilder = new SchemaBuilder($factory);
 
-        $name = new TestName('test');
+        $name = new TestName('powerLevel');
         $schemaBuilder
             ->arguments($name)
-            ->argument(new TestName('foo'))
-            ->type($schemaBuilder->string());
+            ->argument(new TestName('intensity'))
+            ->type($schemaBuilder->float());
 
         $schemaBuilder
             ->arguments($name)
-            ->argument(new TestName('bar'))
-            ->type($schemaBuilder->string())
+            ->argument(new TestName('duration'))
+            ->type($schemaBuilder->int())
             ->required();
-
-        $schemaBuilder
-            ->arguments($name)
-            ->argument(new TestName('foobar'))
-            ->type($schemaBuilder->string())
-            ->required()
-            ->asCollection();
-
-        $type = $schemaBuilder->build()->getTypes()->byName($name);
-        $options = PrinterOptions::default();
-        $result = PrinterSingleton::getInstance()->print(
-            $type,
-            $options
+        $types = $schemaBuilder->build()->getTypes();
+        $actual = $types->byName($name);
+        $expected = new ArgumentsSet(
+            new TestName('powerLevel'),
+            new Arguments([
+                new ArgumentType(
+                    new TestName('intensity'),
+                    $types->inputByName(DefaultNames::Float),
+                ),
+                new ArgumentType(
+                    new TestName('duration'),
+                    new InputRequired($types->inputByName(DefaultNames::Int)),
+                ),
+            ])
         );
-
-        $this->assertEquals(
-            'ArgumentsSet test {
-  foo: String;
-  bar: String!;
-  foobar: [String!]!;
-}',
-            $result
-        );
+        $this->assertEquals($expected, $actual);
     }
 
 
     public function testArgumentSetIsAddedToField(): void
     {
-        $this->markTestIncomplete('Not yet implemented, arguments are not added to fields yet.');
-
         $factory = new TypeBuilderFactory();
         $schemaBuilder = new SchemaBuilder($factory);
 
@@ -67,12 +61,12 @@ final class ArgumentSetBuilderTest extends MockeryTestCase
         $schemaBuilder
             ->arguments($name)
             ->argument(new TestName('intensity'))
-            ->type($schemaBuilder->string());
+            ->type($schemaBuilder->float());
 
         $schemaBuilder
             ->arguments($name)
             ->argument(new TestName('duration'))
-            ->type($schemaBuilder->string())
+            ->type($schemaBuilder->int())
             ->required();
 
         $objectName = new TestName('Human');
@@ -96,19 +90,160 @@ final class ArgumentSetBuilderTest extends MockeryTestCase
             ->type($schemaBuilder->outputObject($objectName))
             ->addArgumentSet($schemaBuilder->arguments($name));
 
-        $options = PrinterOptions::default();
-        $type = $schemaBuilder->build()->getTypes()->byName(DefaultNames::Query);
-        $result = PrinterSingleton::getInstance()->print(
-            $type,
-            $options
-        );
+        $types = $schemaBuilder->build()->getTypes();
+        $type = $types->byName(DefaultNames::Query);
+        assert($type instanceof OutputObject);
 
-        $this->assertEquals(
-            'OutputObject Query {
-  human: Human
-}',
-            $result
-        );
+        $human = $type->getFields()->byName($fieldName);
+
+        $actual = $human->getArguments();
+        $expected = new Arguments([
+            new ArgumentType(
+                new TestName('intensity'),
+                $types->inputByName(DefaultNames::Float),
+            ),
+            new ArgumentType(
+                new TestName('duration'),
+                new InputRequired($types->inputByName(DefaultNames::Int)),
+            ),
+        ]);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testArgumentSetIsAddedToFieldAfter(): void
+    {
+        $factory = new TypeBuilderFactory();
+        $schemaBuilder = new SchemaBuilder($factory);
+
+        $objectName = new TestName('Human');
+
+        $human = $schemaBuilder
+            ->outputObject($objectName);
+
+        $human
+            ->field(new TestName('age'))
+            ->type($schemaBuilder->int());
+
+        $human
+            ->field(new TestName('name'))
+            ->type($schemaBuilder->string());
+
+        $fieldName = new TestName('human');
+
+        $schemaBuilder
+            ->query()
+            ->field($fieldName)
+            ->type($schemaBuilder->outputObject($objectName));
+
+
+
+        $name = new TestName('powerLevel');
+        $schemaBuilder
+            ->arguments($name)
+            ->argument(new TestName('intensity'))
+            ->type($schemaBuilder->float());
+
+        $schemaBuilder
+            ->arguments($name)
+            ->argument(new TestName('duration'))
+            ->type($schemaBuilder->int())
+            ->required();
+
+        $schemaBuilder
+            ->query()
+            ->field($fieldName)
+            ->addArgumentSet($schemaBuilder->arguments($name));
+
+        $types = $schemaBuilder->build()->getTypes();
+        $type = $types->byName(DefaultNames::Query);
+        assert($type instanceof OutputObject);
+
+        $human = $type->getFields()->byName($fieldName);
+
+        $actual = $human->getArguments();
+        $expected = new Arguments([
+            new ArgumentType(
+                new TestName('intensity'),
+                $types->inputByName(DefaultNames::Float),
+            ),
+            new ArgumentType(
+                new TestName('duration'),
+                new InputRequired($types->inputByName(DefaultNames::Int)),
+            ),
+        ]);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+
+    public function testArgumentSetIsAddedToFieldSameFields(): void
+    {
+        $factory = new TypeBuilderFactory();
+        $schemaBuilder = new SchemaBuilder($factory);
+
+        $objectName = new TestName('Human');
+
+        $human = $schemaBuilder
+            ->outputObject($objectName);
+
+        $human
+            ->field(new TestName('age'))
+            ->type($schemaBuilder->int());
+
+        $human
+            ->field(new TestName('name'))
+            ->type($schemaBuilder->string());
+
+        $fieldName = new TestName('human');
+
+        $schemaBuilder
+            ->query()
+            ->field($fieldName)
+            ->type($schemaBuilder->outputObject($objectName));
+
+        $schemaBuilder
+            ->query()
+            ->field($fieldName)
+            ->argument(new TestName('intensity'))
+            ->required();
+
+        $name = new TestName('powerLevel');
+        $schemaBuilder
+            ->arguments($name)
+            ->argument(new TestName('intensity'))
+            ->type($schemaBuilder->float());
+
+        $schemaBuilder
+            ->arguments($name)
+            ->argument(new TestName('duration'))
+            ->type($schemaBuilder->int())
+            ->required();
+
+        $schemaBuilder
+            ->query()
+            ->field($fieldName)
+            ->addArgumentSet($schemaBuilder->arguments($name));
+
+        $types = $schemaBuilder->build()->getTypes();
+        $type = $types->byName(DefaultNames::Query);
+        assert($type instanceof OutputObject);
+
+        $human = $type->getFields()->byName($fieldName);
+
+        $actual = $human->getArguments();
+        $expected = new Arguments([
+            new ArgumentType(
+                new TestName('intensity'),
+                new InputRequired($types->inputByName(DefaultNames::Float)),
+            ),
+            new ArgumentType(
+                new TestName('duration'),
+                new InputRequired($types->inputByName(DefaultNames::Int)),
+            ),
+        ]);
+
+        $this->assertEquals($expected, $actual);
     }
 
 }
