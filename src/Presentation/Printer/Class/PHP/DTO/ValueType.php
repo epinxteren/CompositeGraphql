@@ -24,7 +24,7 @@ class ValueType implements HasNamespaces
 
     public function toCode(PrinterContext $context): string
     {
-        $type = $this->type instanceof ClassNamespace ? $this->type->toCode($context) : $this->type;
+        $type = $this->type instanceof ClassNamespace ? $this->type->shortName() : $this->type;
 
         return $this->isNullable ? sprintf('?%s', $type) : $type;
     }

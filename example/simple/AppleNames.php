@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace example\simple;
+namespace Example\simple;
 
 use CompositeGraphQL\Presentation\Value\Name;
 

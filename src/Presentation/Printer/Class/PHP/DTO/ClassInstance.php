@@ -15,8 +15,6 @@ class ClassInstance extends Abstraction
         $this->members = new Members([]);
     }
 
-
-
     public function namespaces(): Namespaces
     {
         $namespaces = parent::namespaces();

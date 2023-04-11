@@ -17,4 +17,9 @@ class TestType implements Type {
     {
         return null;
     }
+
+    public function merge(Type $other): Type
+    {
+        return $this;
+    }
 }

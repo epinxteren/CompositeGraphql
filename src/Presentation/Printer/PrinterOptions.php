@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CompositeGraphQL\Presentation\Printer;
 
-final class PrinterOptions
+class PrinterOptions
 {
     private int $indentationSize = 2;
 

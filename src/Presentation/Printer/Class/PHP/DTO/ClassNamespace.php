@@ -8,6 +8,7 @@ class ClassNamespace
     public function __construct(
         public string $namespace,
         public ?string $alias = null,
+        public ?string $shortName = null,
     ) {
     }
 
@@ -32,6 +33,10 @@ class ClassNamespace
 
     public function shortName(): string
     {
+        if ($this->shortName) {
+            return $this->shortName;
+        }
+
         $parts = explode('\\', $this->namespace);
 
         return end($parts);
