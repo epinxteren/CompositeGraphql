@@ -34,6 +34,7 @@ services:
             - host.docker.internal:host-gateway
 
     php:
+        user: '1000:1000' # This will mimic your user and group, i.e. anything you (the host) can read/write the container can too. Confirm with `echo $(id -u):$(id -g)` on the host.
         extra_hosts:
             - host.docker.internal:host-gateway
 

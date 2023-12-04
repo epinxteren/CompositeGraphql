@@ -144,6 +144,3 @@ WORKDIR /app
 
 FROM base AS development
 
-# This is for docker compose integration for yetbrains IDE, you cannot specify the user
-# during a connection
-USER www-data

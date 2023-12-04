@@ -20,7 +20,7 @@ endif
 export compose
 export compose_tools
 
-shell_php=$(compose) exec --user www-data:www-data ${extra} php bash -lcs
+shell_php=$(compose) exec  ${extra} php bash -lcs
 shell_nginx=$(compose) exec ${extra} nginx bash -lcs
 shell_root_php=$(compose) exec --user root:root ${extra} php bash -lcs
 php_cli=php -d memory_limit=-1
@@ -48,7 +48,7 @@ export DOCKER_MACHINE
 
 .PHONY: sh
 sh: ## [utility]
-		$(compose) exec --user www-data:www-data php bash -l
+		$(compose) exec  php bash -l
 
 .PHONY: sh-root
 sh-root: ## [utility]

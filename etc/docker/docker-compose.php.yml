@@ -17,10 +17,7 @@ services:
         external_links: # TODO: This feature is deprecated. Use networks.
             - traefik:php.${COMPOSE_PROJECT_NAME}.local
         environment:
-            - CI_NODE_INDEX=${CI_NODE_INDEX}
-            - CI_NODE_TOTAL=${CI_NODE_TOTAL}
             - APP_VERSIONS
-            - PUSHER_SECRET=${PUSHER_SECRET}
             - XDEBUG_MODE=debug
             - XDEBUG_CLIENT_HOST=php.docker.internal
             - 'PHP_IDE_CONFIG=serverName=php.${COMPOSE_PROJECT_NAME}.local'

@@ -16,7 +16,9 @@
     "phpunit/phpunit": "9.5.20",
     "qossmic/deptrac-shim": "^0.19.3",
     "roave/security-advisories": "dev-master",
-    "sylius-labs/coding-standard": "v4.2.0"
+    "sylius-labs/coding-standard": "v4.2.0",
+    "symfony/http-foundation": "^6.4",
+    "symfony/routing": "^6.4"
   },
   "config": {
     "preferred-install": {
@@ -45,11 +47,5 @@
   "conflict": {
   },
   "extra": {
-  },
-  "repositories": {
-    "pharhub": {
-      "type": "composer",
-      "url": "https://packages.pharhub.dev"
-    }
   }
 }
